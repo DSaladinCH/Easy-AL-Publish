@@ -11,6 +11,7 @@ namespace EasyALPublish.Misc
     public class PublishConfig : INotifyPropertyChanged
     {
         public string Name { get; set; }
+        public string InstanceName { get; set; }
 
         private ObservableCollection<Extension> extensions = new ObservableCollection<Extension>();
 

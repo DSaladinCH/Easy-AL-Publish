@@ -1,8 +1,11 @@
 ﻿using EasyALPublish.Misc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,10 +47,11 @@ namespace EasyALPublish
 
         private void btn_start_Click(object sender, RoutedEventArgs e)
         {
+            PowerShell ps = PowerShell.Create();
             Task.Run(async () =>
             {
                 await Task.Delay(100);
-                DataModel.Instance.CurrConfig.Extensions[0].CurrVersion = "16.0.0.0";
+                DataModel.Instance.CurrConfig.Extensions[0].CurrVersion = GetAppCurrVersion(ps, DataModel.Instance.CurrConfig.Extensions[0].Name);
                 await Task.Delay(200);
                 DataModel.Instance.CurrConfig.Extensions[0].NewVersion = "16.0.0.1";
 
@@ -61,6 +65,17 @@ namespace EasyALPublish
                 await Task.Delay(500);
                 DataModel.Instance.CurrConfig.Extensions[0].Dependencies[1].NewVersion = "16.0.0.12";
             });
+        }
+
+        private string GetAppCurrVersion(PowerShell ps, string instanceName, string appName)
+        {
+            ps.AddCommand(string.Format("Get-NAVAppInfo -ServerInstance {0} -Name {1}"));
+            string appInfo = File.ReadAllText(@"C:\Users\domin\Desktop\GetNavAppInfoTemp.txt");
+            List<Match> matches = Regex.Matches(appInfo, @"([A-Za-z0-9 ]+)\:(.+)").ToList();
+            Match version = matches.FirstOrDefault(m => m.Groups[1].ToString().Trim() == "Version");
+            if (version == null)
+                return "";
+            return version.Groups[2].ToString().Trim();
         }
 
         private void cmb_company_SelectionChanged(object sender, SelectionChangedEventArgs e)
