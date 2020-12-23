@@ -4,9 +4,88 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyALPublish"
+        xmlns:misc="clr-namespace:EasyALPublish.Misc"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Style="{DynamicResource DefaultWindow}"
+        Title="MainWindow" Height="350" Width="250" MinHeight="350" MinWidth="250">
+    <Grid Background="{DynamicResource BackgroundC}">
+        <Grid Margin="5,5,5,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Button Name="btn_start" fa:Awesome.Content="Play" Grid.RowSpan="2" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Height="50" Width="50" Padding="0" Click="btn_start_Click" />
+
+                <ComboBox Name="cmb_company" Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Companies}" SelectionChanged="cmb_company_SelectionChanged"
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="15,0,15,2" />
+                <ComboBox Name="cmb_config" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding CurrCompany.Configs}" SelectionChanged="cmb_config_SelectionChanged"
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="15,2,15,0"/>
+
+                <Button Name="btn_pin" fa:Awesome.Content="ThumbTack" Grid.Column="2" Grid.RowSpan="2" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Height="50" Width="50" Click="btn_pin_Click">
+                    <Button.LayoutTransform>
+                        <RotateTransform CenterX="0.5" CenterY="0.5" Angle="90"/>
+                    </Button.LayoutTransform>
+                </Button>
+                <Button Name="btn_unpin" fa:Awesome.Content="ThumbTack" Grid.Column="2" Grid.RowSpan="2" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Height="50" Width="50" Click="btn_pin_Click" Visibility="Collapsed">
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="10,5,0,0">
+                <TreeView Name="trv_extensions" ItemsSource="{Binding CurrConfig.Extensions}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemDefault}">
+                            <Setter Property="IsExpanded" Value="True" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type misc:Extension}" ItemsSource="{Binding Dependencies}">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Label Content="{Binding Name}" Grid.Column="0" Padding="0,6,0,6" />
+                                <Button Grid.Column="1" HorizontalAlignment="Right" VerticalContentAlignment="Bottom" Margin="0,0,10,0" Width="30"
+                                        Style="{DynamicResource TransparentButton}" fa:Awesome.Content="Plus" Click="btn_addDependency_Click" />
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,-5,0,0">
+                                    <Label Grid.Row="1" Content="{Binding CurrVersion}" Padding="0,0,0,0" FontSize="10" />
+                                    <Label Grid.Row="1" fa:Awesome.Content="LongArrowRight" Padding="0,0,0,0"  FontSize="10"
+                                           VerticalContentAlignment="Center" Margin="10,0,10,0" Visibility="{Binding ShowVersions}" />
+                                    <Label Grid.Row="1" Content="{Binding NewVersion}" Padding="0,0,0,0" FontSize="10" />
+                                </StackPanel>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </Grid>
+
+            <Button Name="btn_config" fa:Awesome.Content="Cog" Grid.Row="1" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_config_Click" />
+            <Button Name="btn_addExtension" fa:Awesome.Content="Plus" Grid.Row="1" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_addExtension_Click" />
+        </Grid>
     </Grid>
 </Window>

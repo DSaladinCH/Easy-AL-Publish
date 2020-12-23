@@ -4,6 +4,24 @@
              xmlns:local="clr-namespace:EasyALPublish"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Resources/Schema/Dark.xaml" />
+                <ResourceDictionary Source="./Resources/Window/DefaultWindow.xaml" />
+
+                <!-- Buttons -->
+                <ResourceDictionary Source="./Resources/Button/Default.xaml" />
+                <ResourceDictionary Source="./Resources/Button/Transparent.xaml" />
+
+                <!-- Combobox -->
+                <ResourceDictionary Source="./Resources/Combobox/Default.xaml" />
+
+                <!-- TreeView -->
+                <ResourceDictionary Source="./Resources/TreeView/Default.xaml" />
+
+                <!-- TextBox -->
+                <ResourceDictionary Source="./Resources/TextBox/Default.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
