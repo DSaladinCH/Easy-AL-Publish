@@ -21,18 +21,6 @@ namespace EasyALPublish.PopUp
     /// </summary>
     public partial class Input : Window, INotifyPropertyChanged
     {
-        private string title;
-
-        public string Title
-        {
-            get { return title; }
-            set
-            {
-                title = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private string inputText;
 
         public string InputText
@@ -44,6 +32,7 @@ namespace EasyALPublish.PopUp
                 NotifyPropertyChanged();
             }
         }
+        public bool CloseOK { get; set; } = false;
 
         public Input(string title, string startText = "")
         {
@@ -57,6 +46,21 @@ namespace EasyALPublish.PopUp
         private void NotifyPropertyChanged([CallerMemberName] string propName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            CloseOK = Convert.ToBoolean(((Button)sender).Tag);
+            if (!CloseOK)
+            {
+                this.Close();
+                return;
+            }
+
+            if (tbx_input.Text.Length < 1)
+                return;
+
+            this.Close();
         }
     }
 }

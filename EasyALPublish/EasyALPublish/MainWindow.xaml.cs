@@ -1,9 +1,10 @@
-﻿using EasyALPublish.Misc;
+﻿using EasyALPublish.Extension;
+using EasyALPublish.Misc;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace EasyALPublish
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = DataModel.Instance;
+            DataContext = AppModel.Instance;
         }
 
         private void btn_pin_Click(object sender, RoutedEventArgs e)
@@ -47,65 +48,91 @@ namespace EasyALPublish
 
         private void btn_start_Click(object sender, RoutedEventArgs e)
         {
-            PowerShell ps = PowerShell.Create();
+            PowerShell.StartPS(AppModel.Instance.CurrConfig.Version);
             Task.Run(async () =>
             {
-                await Task.Delay(100);
-                DataModel.Instance.CurrConfig.Extensions[0].CurrVersion = GetAppCurrVersion(ps, DataModel.Instance.CurrConfig.Extensions[0].Name);
-                await Task.Delay(200);
-                DataModel.Instance.CurrConfig.Extensions[0].NewVersion = "16.0.0.1";
+                string instanceName = AppModel.Instance.CurrConfig.InstanceName;
+                await AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
 
-                await Task.Delay(300);
-                DataModel.Instance.CurrConfig.Extensions[0].Dependencies[0].CurrVersion = "16.0.0.45";
-                await Task.Delay(150);
-                DataModel.Instance.CurrConfig.Extensions[0].Dependencies[0].NewVersion = "16.0.0.46";
+                //await Task.Delay(100);
+                //AppModel.Instance.CurrConfig.Extensions[0].CurrVersion = GetAppCurrVersion(instanceName, AppModel.Instance.CurrConfig.Extensions[0].Name);
+                //await Task.Delay(200);
+                //AppModel.Instance.CurrConfig.Extensions[0].NewVersion = "16.0.0.1";
 
-                await Task.Delay(50);
-                DataModel.Instance.CurrConfig.Extensions[0].Dependencies[1].CurrVersion = "16.0.0.10";
-                await Task.Delay(500);
-                DataModel.Instance.CurrConfig.Extensions[0].Dependencies[1].NewVersion = "16.0.0.12";
+                //await Task.Delay(300);
+                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[0].CurrVersion = "16.0.0.45";
+                //await Task.Delay(150);
+                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[0].NewVersion = "16.0.0.46";
+
+                //await Task.Delay(50);
+                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[1].CurrVersion = "16.0.0.10";
+                //await Task.Delay(500);
+                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[1].NewVersion = "16.0.0.12";
             });
-        }
-
-        private string GetAppCurrVersion(PowerShell ps, string instanceName, string appName)
-        {
-            ps.AddCommand(string.Format("Get-NAVAppInfo -ServerInstance {0} -Name {1}"));
-            string appInfo = File.ReadAllText(@"C:\Users\domin\Desktop\GetNavAppInfoTemp.txt");
-            List<Match> matches = Regex.Matches(appInfo, @"([A-Za-z0-9 ]+)\:(.+)").ToList();
-            Match version = matches.FirstOrDefault(m => m.Groups[1].ToString().Trim() == "Version");
-            if (version == null)
-                return "";
-            return version.Groups[2].ToString().Trim();
         }
 
         private void cmb_company_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataModel.Instance.CurrCompany = (Company)cmb_company.SelectedItem;
+            AppModel.Instance.CurrCompany = (Company)cmb_company.SelectedItem;
             cmb_config.SelectedIndex = 0;
-            if (DataModel.Instance.CurrCompany.Configs.Count != 0)
-                DataModel.Instance.CurrConfig = DataModel.Instance.CurrCompany.Configs[0];
+            if (AppModel.Instance.CurrCompany.Configs.Count != 0)
+                AppModel.Instance.CurrConfig = AppModel.Instance.CurrCompany.Configs[0];
         }
 
         private void cmb_config_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataModel.Instance.CurrConfig = (PublishConfig)cmb_config.SelectedItem;
-            if (DataModel.Instance.CurrConfig == null)
+            AppModel.Instance.CurrConfig = (PublishConfig)cmb_config.SelectedItem;
+            if (AppModel.Instance.CurrConfig == null)
                 return;
         }
 
         private void btn_addDependency_Click(object sender, RoutedEventArgs e)
         {
-            return;
+            BCExtension parentExtension = (BCExtension)((Button)sender).DataContext;
+            if (!PopUpMgt.NewExtension(out BCExtension newExtension, Topmost))
+                return;
+            parentExtension.Dependencies.Add(newExtension);
         }
 
-        private void btn_config_Click(object sender, RoutedEventArgs e)
+        private void btn_editExtension_Click(object sender, RoutedEventArgs e)
         {
+            BCExtension extension = (BCExtension)((MenuItem)sender).DataContext;
+            if (!PopUpMgt.EditExtension(ref extension, Topmost))
+                return;
+            AppModel.Instance.CurrConfig.Extensions.Update((BCExtension)((MenuItem)sender).DataContext, extension);
+        }
 
+        private void btn_deleteExtension_Click(object sender, RoutedEventArgs e)
+        {
+            AppModel.Instance.CurrConfig.Extensions.Delete((BCExtension)((MenuItem)sender).DataContext);
         }
 
         private void btn_addExtension_Click(object sender, RoutedEventArgs e)
         {
-            DataModel.Instance.CurrConfig.Extensions.Add(new Extension(PopUpMgt.Input("New Extension"), "", "", ""));
+            if (!PopUpMgt.NewExtension(out BCExtension newExtension, Topmost))
+                return;
+            AppModel.Instance.CurrConfig.Extensions.Add(newExtension);
+        }
+
+        private void btn_config_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settings = new Settings();
+            settings.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            AppModel.Instance.SaveData();
+        }
+
+        private void trv_extensions_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1)
+            {
+                //here you would probably want to include code that is called by your
+                //mouse down event handler.
+                e.Handled = true;
+            }
         }
     }
 }

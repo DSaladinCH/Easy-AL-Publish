@@ -7,11 +7,15 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Resources/Schema/Dark.xaml" />
-                <ResourceDictionary Source="./Resources/Window/DefaultWindow.xaml" />
+                <ResourceDictionary Source="./Resources/Window/Default.xaml" />
+                <ResourceDictionary Source="./Resources/Window/NoResize.xaml" />
+                <ResourceDictionary Source="./Resources/Window/CanMinimize.xaml" />
 
                 <!-- Buttons -->
                 <ResourceDictionary Source="./Resources/Button/Default.xaml" />
                 <ResourceDictionary Source="./Resources/Button/Transparent.xaml" />
+                <ResourceDictionary Source="./Resources/Button/OK.xaml" />
+                <ResourceDictionary Source="./Resources/Button/NotOK.xaml" />
 
                 <!-- Combobox -->
                 <ResourceDictionary Source="./Resources/Combobox/Default.xaml" />
@@ -21,6 +25,18 @@
 
                 <!-- TextBox -->
                 <ResourceDictionary Source="./Resources/TextBox/Default.xaml" />
+
+                <!-- Label -->
+                <ResourceDictionary Source="./Resources/Label/Default.xaml" />
+                
+                <!-- ScrollBar -->
+                <ResourceDictionary Source="./Resources/ScrollBar/Default.xaml" />
+
+                <!-- ContextMenu -->
+                <ResourceDictionary Source="./Resources/ContextMenu/Default.xaml" />
+
+                <!-- ListView -->
+                <ResourceDictionary Source="./Resources/ListView/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -14,12 +14,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundInvert}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ForegroundDimmed}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource ForegroundDimmed}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource AccentB}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -7,9 +7,9 @@ using System.Windows;
 
 namespace EasyALPublish.Resources
 {
-    public partial class DefaultWindow : ResourceDictionary
+    public partial class NoResize : ResourceDictionary
     {
-        public DefaultWindow()
+        public NoResize()
         {
             InitializeComponent();
         }
@@ -18,21 +18,6 @@ namespace EasyALPublish.Resources
         {
             var window = (Window)((FrameworkElement)sender).TemplatedParent;
             window.Close();
-        }
-
-        private void MaximizeRestoreClick(object sender, RoutedEventArgs e)
-        {
-            var window = (Window)((FrameworkElement)sender).TemplatedParent;
-            if (window.WindowState == WindowState.Normal)
-                window.WindowState = WindowState.Maximized;
-            else
-                window.WindowState = WindowState.Normal;
-        }
-
-        private void MinimizeClick(object sender, RoutedEventArgs e)
-        {
-            var window = (Window)((FrameworkElement)sender).TemplatedParent;
-            window.WindowState = WindowState.Minimized;
         }
 
         private void OnResize(object sender, RoutedEventArgs e)

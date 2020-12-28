@@ -1,11 +1,10 @@
-﻿using EasyALPublish.Extension;
+﻿using EasyALPublish.Misc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,17 +18,17 @@ using System.Windows.Shapes;
 namespace EasyALPublish.PopUp
 {
     /// <summary>
-    /// Interaction logic for Extension.xaml
+    /// Interaction logic for PublishConfig.xaml
     /// </summary>
-    public partial class Extension : Window, INotifyPropertyChanged
+    public partial class Config : Window, INotifyPropertyChanged
     {
-        private BCExtension bcExtension;
-        public BCExtension BCExtension
+        private PublishConfig publishConfig;
+        public PublishConfig PublishConfig
         {
-            get { return bcExtension; }
+            get { return publishConfig; }
             set
             {
-                bcExtension = value;
+                publishConfig = value;
                 NotifyPropertyChanged();
             }
         }
@@ -47,27 +46,28 @@ namespace EasyALPublish.PopUp
             }
         }
 
-
-        public Extension(bool topMost = false) : this(new BCExtension("New Extension", "", "1.0.0.0", ""), true, topMost)
+        public Config(bool topMost = false) : this(new PublishConfig("New Config", null, "", ""), true, topMost)
         {
             InitializeComponent();
         }
 
-        public Extension(BCExtension extension, bool createMode = true, bool topMost = false)
+        public Config(PublishConfig extension, bool createMode = true, bool topMost = false)
         {
             InitializeComponent();
             DataContext = this;
-            BCExtension = extension;
+            PublishConfig = extension;
             IsCreateMode = createMode;
             if (IsCreateMode)
-                Title = "Create a new Extension";
+                Title = "Create a new Config";
             else
-                Title = "Edit Extension";
+                Title = "Edit Config";
             Topmost = topMost;
-            tbx_extensionName.Focus();
-            tbx_extensionName.Dispatcher.BeginInvoke(new Action(() =>
+            cmb_configVersion.ItemsSource = AppModel.Instance.BCVersions;
+
+            tbx_configName.Focus();
+            tbx_configName.Dispatcher.BeginInvoke(new Action(() =>
             {
-                tbx_extensionName.SelectAll();
+                tbx_configName.SelectAll();
             }));
         }
 
@@ -86,13 +86,16 @@ namespace EasyALPublish.PopUp
                 return;
             }
 
-            if (IsCreateMode && !Regex.IsMatch(tbx_currVersion.Text, @"^(([0-9]+)\.?)*([^\.])$"))
+            if (tbx_configName.Text.Length > 2)
                 return;
 
-            if (tbx_extensionName.Text.Length < 2)
+            if (tbx_instanceName.Text.Length > 2)
                 return;
 
-            if (tbx_extensionPublisher.Text.Length < 2)
+            if (cmb_configVersion.SelectedIndex == -1)
+                return;
+
+            if (tbx_extensionsPath.Text.Length > 2)
                 return;
 
             this.Close();

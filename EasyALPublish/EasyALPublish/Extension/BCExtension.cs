@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace EasyALPublish.Misc
+namespace EasyALPublish.Extension
 {
-    public class Extension : INotifyPropertyChanged
+    [DebuggerDisplay("{Publisher} - {Name} - Dependencies: {Dependencies.Count}")]
+    public class BCExtension : INotifyPropertyChanged, ICloneable
     {
         private string name;
 
@@ -24,14 +27,14 @@ namespace EasyALPublish.Misc
             }
         }
 
-        private string path;
+        private string publisher;
 
-        public string Path
+        public string Publisher
         {
-            get { return path; }
+            get { return publisher; }
             set
             {
-                path = value;
+                publisher = value;
                 NotifyPropertyChanged();
             }
         }
@@ -71,9 +74,9 @@ namespace EasyALPublish.Misc
             }
         }
 
-        private ObservableCollection<Extension> dependencies = new ObservableCollection<Extension>();
+        private ObservableCollection<BCExtension> dependencies = new ObservableCollection<BCExtension>();
 
-        public ObservableCollection<Extension> Dependencies
+        public ObservableCollection<BCExtension> Dependencies
         {
             get { return dependencies; }
             set
@@ -83,19 +86,23 @@ namespace EasyALPublish.Misc
             }
         }
 
-        public Extension(string name, string path, string currVersion, string newVersion)
+        public BCExtension()
         {
-            Name = name;
-            Path = path;
-            CurrVersion = currVersion;
-            NewVersion = newVersion;
-            Dependencies = new ObservableCollection<Extension>();
         }
 
-        public Extension(string name, string path, string currVersion, string newVersion, ObservableCollection<Extension> dependencies)
+        public BCExtension(string name, string publisher, string currVersion, string newVersion)
         {
             Name = name;
-            Path = path;
+            Publisher = publisher;
+            CurrVersion = currVersion;
+            NewVersion = newVersion;
+            Dependencies = new ObservableCollection<BCExtension>();
+        }
+
+        public BCExtension(string name, string publisher, string currVersion, string newVersion, ObservableCollection<BCExtension> dependencies)
+        {
+            Name = name;
+            Publisher = publisher;
             CurrVersion = currVersion;
             NewVersion = newVersion;
             Dependencies = dependencies;
@@ -105,6 +112,19 @@ namespace EasyALPublish.Misc
         private void NotifyPropertyChanged([CallerMemberName] string propName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
+        public object Clone()
+        {
+            //return JsonSerializer.Deserialize<BCExtension>(JsonSerializer.Serialize(this));
+            return new BCExtension()
+            {
+                Name = this.Name,
+                Publisher = this.Publisher,
+                CurrVersion = this.CurrVersion,
+                NewVersion = this.NewVersion,
+                Dependencies = this.Dependencies
+            };
         }
     }
 }
