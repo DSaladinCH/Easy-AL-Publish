@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace EasyALPublish.PopUp
 {
@@ -69,6 +70,11 @@ namespace EasyALPublish.PopUp
             {
                 tbx_extensionName.SelectAll();
             }));
+        }
+
+        private void textbox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ((TextBox)sender).SelectAll();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

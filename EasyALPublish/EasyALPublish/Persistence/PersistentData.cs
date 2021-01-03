@@ -9,6 +9,7 @@ namespace EasyALPublish.Persistence
 {
     public class PersistentData
     {
+        public AppOptions AppOptions { get; set; } = new AppOptions();
         public List<Company> Companies { get; set; } = new List<Company>();
     }
 }

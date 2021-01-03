@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -73,6 +72,8 @@ namespace EasyALPublish.Extension
                 return Visibility.Visible;
             }
         }
+
+        public ExtensionStatus Status { get; set; }
 
         private ObservableCollection<BCExtension> dependencies = new ObservableCollection<BCExtension>();
 

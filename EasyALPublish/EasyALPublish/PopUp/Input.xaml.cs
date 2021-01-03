@@ -40,6 +40,17 @@ namespace EasyALPublish.PopUp
             DataContext = this;
             Title = title;
             InputText = startText;
+
+            tbx_input.Focus();
+            tbx_input.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                tbx_input.SelectAll();
+            }));
+        }
+
+        public Input(string title, bool topMost) : this(title, "")
+        {
+            Topmost = topMost;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

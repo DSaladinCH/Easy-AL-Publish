@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace EasyALPublish.Persistence
 {
@@ -22,15 +21,16 @@ namespace EasyALPublish.Persistence
             }
         }
 
-        JsonSerializerOptions options = new JsonSerializerOptions()
+        JsonSerializerSettings options = new JsonSerializerSettings()
         {
-            ReferenceHandler = ReferenceHandler.Preserve,
-            WriteIndented = true
+            PreserveReferencesHandling = PreserveReferencesHandling.All,
+            Formatting = Formatting.Indented
         };
 
         public PersistenceJsonManagement()
         {
-            savePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
+            //savePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
+            savePath = "C:\\temp\\";
         }
 
         public PersistentData Load()
@@ -41,7 +41,7 @@ namespace EasyALPublish.Persistence
             string json = File.ReadAllText(savePathFile);
             try
             {
-                return JsonSerializer.Deserialize<PersistentData>(json, options);
+                return JsonConvert.DeserializeObject<PersistentData>(json, options);
             }
             catch
             {
@@ -51,7 +51,7 @@ namespace EasyALPublish.Persistence
 
         public bool Save(PersistentData dataToSave)
         {
-            string json = JsonSerializer.Serialize(dataToSave, options);
+            string json = JsonConvert.SerializeObject(dataToSave, options);
             try
             {
                 File.WriteAllText(savePathFile, json);

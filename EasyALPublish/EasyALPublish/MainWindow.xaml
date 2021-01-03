@@ -10,7 +10,7 @@
         Style="{DynamicResource DefaultWindow}"
         Title="MainWindow" Height="350" Width="250" MinHeight="350" MinWidth="250" Closing="Window_Closing">
     <Grid Background="{DynamicResource BackgroundC}">
-        <Grid Margin="5,5,5,5">
+        <Grid Margin="10,10,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
@@ -32,9 +32,9 @@
                     Height="50" Width="50" Padding="0" Click="btn_start_Click" />
 
                 <ComboBox Name="cmb_company" Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Companies}" SelectionChanged="cmb_company_SelectionChanged"
-                          DisplayMemberPath="Name" SelectedIndex="0" Margin="15,0,15,2" />
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="12,0,12,2" />
                 <ComboBox Name="cmb_config" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding CurrCompany.Configs}" SelectionChanged="cmb_config_SelectionChanged"
-                          DisplayMemberPath="Name" SelectedIndex="0" Margin="15,2,15,0"/>
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="12,2,12,0"/>
 
                 <Button Name="btn_pin" fa:Awesome.Content="ThumbTack" Grid.Column="2" Grid.RowSpan="2" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"
                     Height="50" Width="50" Click="btn_pin_Click">
@@ -47,63 +47,65 @@
                 </Button>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="10,5,0,0">
-                    <TreeView Name="trv_extensions" ItemsSource="{Binding CurrConfig.Extensions}"
-                              TreeViewItem.PreviewMouseLeftButtonDown="trv_extensions_PreviewMouseLeftButtonDown">
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemDefault}">
-                                <Setter Property="IsExpanded" Value="True" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type extension:BCExtension}" ItemsSource="{Binding Dependencies}">
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="30" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Edit" Click="btn_editExtension_Click">
-                                                <MenuItem.Icon>
-                                                    <fa:ImageAwesome Icon="Edit" Foreground="{DynamicResource ForegroundDefault}" />
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                            <MenuItem Header="Delete" Click="btn_deleteExtension_Click">
-                                                <MenuItem.Icon>
-                                                    <fa:ImageAwesome Icon="Trash" Foreground="{DynamicResource ErrorNormal}" />
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
-                                    <Label Content="{Binding Name}" Grid.Column="0" Padding="0,6,0,6" />
-                                    <Button Grid.Column="1" HorizontalAlignment="Right" VerticalContentAlignment="Center" Margin="0,0,0,0" Width="30"
-                                        Style="{DynamicResource TransparentButton}" fa:Awesome.Content="Plus" Click="btn_addDependency_Click" />
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,-5,0,0">
-                                        <Label Grid.Row="1" Content="{Binding CurrVersion}" Padding="0,0,0,0" FontSize="10"
-                                           Foreground="{DynamicResource ForegroundDimmed}" />
-                                        <Label Grid.Row="1" fa:Awesome.Content="LongArrowRight" Padding="0,0,0,0"  FontSize="10"
-                                           VerticalContentAlignment="Center" Margin="10,0,10,0" Visibility="{Binding ShowVersions}"
-                                           Foreground="{DynamicResource ForegroundDimmed}" />
-                                        <Label Grid.Row="1" Content="{Binding NewVersion}" Padding="0,0,0,0" FontSize="10"
-                                           Foreground="{DynamicResource ForegroundDimmed}" />
-                                    </StackPanel>
-                                </Grid>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
+            <Grid Grid.Row="1" Margin="5,5,0,0">
+                <TreeView Name="trv_extensions" ItemsSource="{Binding CurrConfig.Extensions}"
+                            TreeViewItem.PreviewMouseLeftButtonDown="trv_extensions_PreviewMouseLeftButtonDown">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemDefault}">
+                            <Setter Property="IsExpanded" Value="True" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type extension:BCExtension}" ItemsSource="{Binding Dependencies}">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="30" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Edit" Click="btn_editExtension_Click">
+                                            <MenuItem.Icon>
+                                                <fa:ImageAwesome Icon="Edit" Foreground="{DynamicResource ForegroundDefault}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Delete" Click="btn_deleteExtension_Click">
+                                            <MenuItem.Icon>
+                                                <fa:ImageAwesome Icon="Trash" Foreground="{DynamicResource ErrorNormal}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <Label Content="{Binding Name}" Grid.Column="0" Padding="0,6,0,6" />
+                                <Button Grid.Column="1" HorizontalAlignment="Right" VerticalContentAlignment="Center" Margin="0,0,0,0" Width="30"
+                                    Style="{DynamicResource TransparentButton}" fa:Awesome.Content="Plus" Click="btn_addDependency_Click" />
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,-5,0,0">
+                                    <Label Grid.Row="1" Content="{Binding CurrVersion}" Padding="0,0,0,0" FontSize="10"
+                                        Foreground="{DynamicResource ForegroundDimmed}" />
+                                    <Label Grid.Row="1" fa:Awesome.Content="LongArrowRight" Padding="0,0,0,0"  FontSize="10"
+                                        VerticalContentAlignment="Center" Margin="10,0,10,0" Visibility="{Binding ShowVersions}"
+                                        Foreground="{DynamicResource ForegroundDimmed}" />
+                                    <Label Grid.Row="1" Content="{Binding NewVersion}" Padding="0,0,0,0" FontSize="10"
+                                        Foreground="{DynamicResource ForegroundDimmed}" />
+                                </StackPanel>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </Grid>
 
             <Button Name="btn_config" fa:Awesome.Content="Cog" Grid.Row="1" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_config_Click" />
+                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_config_Click"
+                    Margin="0,0,-5,-5" />
             <Button Name="btn_addExtension" fa:Awesome.Content="Plus" Grid.Row="1" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_addExtension_Click" />
+                    Height="35" Width="35" Padding="0" Style="{DynamicResource TransparentButton}" Click="btn_addExtension_Click"
+                    Margin="-5,0,0,-5" />
         </Grid>
     </Grid>
 </Window>

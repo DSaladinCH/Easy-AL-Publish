@@ -25,7 +25,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Config Name" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
-                <TextBox Name="tbx_configName" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding PublishConfig.Name}" TabIndex="0" />
+                <TextBox Name="tbx_configName" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding PublishConfig.Name}" TabIndex="0"
+                         GotFocus="textbox_GotFocus" />
             </Grid>
 
             <Grid Grid.Row="2">
@@ -35,7 +36,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Instance Name" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
                 <TextBox Name="tbx_instanceName" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding PublishConfig.InstanceName}"
-                         TabIndex="1" />
+                         TabIndex="1" GotFocus="textbox_GotFocus" />
             </Grid>
 
             <Grid Grid.Row="3">
@@ -44,7 +45,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="BC Version" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
-                <ComboBox Grid.Row="1" Name="cmb_configVersion" SelectedItem="{Binding PublishConfig.Version}" TabIndex="2" />
+                <ComboBox Grid.Row="1" Name="cmb_configVersion" SelectedItem="{Binding PublishConfig.Version}" TabIndex="2"
+                          DisplayMemberPath="Name" GotFocus="cmb_configVersion_GotFocus" SelectionChanged="cmb_configVersion_SelectionChanged" />
             </Grid>
 
             <Grid Grid.Row="4">
@@ -54,7 +56,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Extensions Path" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
                 <TextBox Name="tbx_extensionsPath" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding PublishConfig.ExtensionsPath}"
-                         TabIndex="3" />
+                         TabIndex="3" GotFocus="textbox_GotFocus" />
             </Grid>
 
             <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">

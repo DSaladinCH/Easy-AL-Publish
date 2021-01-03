@@ -8,7 +8,7 @@ namespace EasyALPublish.Persistence
 {
     public interface IPersistenceDataManagement
     {
-        public PersistentData Load();
-        public bool Save(PersistentData dataToSave);
+        PersistentData Load();
+        bool Save(PersistentData dataToSave);
     }
 }

@@ -14,6 +14,16 @@ namespace EasyALPublish
     //[DebuggerDisplay("")]
     public static class Extensions
     {
+        public static void RunForEach(this ObservableCollection<BCExtension> extensions, Action<BCExtension> function, bool withSubElements = true)
+        {
+            for (int i = 0; i < extensions.Count; i++)
+            {
+                if (extensions[i].Dependencies.Count > 0)
+                    extensions[i].Dependencies.RunForEach(function, withSubElements);
+                function?.Invoke(extensions[i]);
+            }
+        }
+
         public static bool Create(this ObservableCollection<Company> companies, Company value)
         {
             if (companies.FirstOrDefault(c => c.Name == value.Name) != null)

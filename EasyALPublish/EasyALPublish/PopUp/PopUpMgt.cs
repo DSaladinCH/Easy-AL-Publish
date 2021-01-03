@@ -17,6 +17,13 @@ namespace EasyALPublish
             return input.InputText;
         }
 
+        public static string Input(string title, bool topMost)
+        {
+            PopUp.Input input = new PopUp.Input(title, topMost);
+            input.ShowDialog();
+            return input.InputText;
+        }
+
         public static bool NewExtension(out BCExtension ex, bool topMost = false)
         {
             PopUp.Extension extension = new PopUp.Extension(topMost);

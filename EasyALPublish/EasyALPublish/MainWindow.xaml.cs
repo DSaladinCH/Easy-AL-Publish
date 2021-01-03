@@ -1,8 +1,10 @@
-﻿using EasyALPublish.Extension;
+﻿using DSaladin.DynamicsBC;
+using EasyALPublish.Extension;
 using EasyALPublish.Misc;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,6 +31,7 @@ namespace EasyALPublish
         {
             InitializeComponent();
             DataContext = AppModel.Instance;
+            AppModel.Instance.AppOptions.Instantiate();
         }
 
         private void btn_pin_Click(object sender, RoutedEventArgs e)
@@ -46,29 +49,24 @@ namespace EasyALPublish
             }
         }
 
-        private void btn_start_Click(object sender, RoutedEventArgs e)
+        private async void btn_start_Click(object sender, RoutedEventArgs e)
         {
-            PowerShell.StartPS(AppModel.Instance.CurrConfig.Version);
-            Task.Run(async () =>
-            {
-                string instanceName = AppModel.Instance.CurrConfig.InstanceName;
-                await AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
-
-                //await Task.Delay(100);
-                //AppModel.Instance.CurrConfig.Extensions[0].CurrVersion = GetAppCurrVersion(instanceName, AppModel.Instance.CurrConfig.Extensions[0].Name);
-                //await Task.Delay(200);
-                //AppModel.Instance.CurrConfig.Extensions[0].NewVersion = "16.0.0.1";
-
-                //await Task.Delay(300);
-                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[0].CurrVersion = "16.0.0.45";
-                //await Task.Delay(150);
-                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[0].NewVersion = "16.0.0.46";
-
-                //await Task.Delay(50);
-                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[1].CurrVersion = "16.0.0.10";
-                //await Task.Delay(500);
-                //AppModel.Instance.CurrConfig.Extensions[0].Dependencies[1].NewVersion = "16.0.0.12";
-            });
+            if (!Commands.IsInitialized())
+                Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion);
+            //PowerShellMgt.StartPS(AppModel.Instance.CurrConfig.Version);
+            //string instanceName = AppModel.Instance.CurrConfig.InstanceName;
+            Debug.WriteLine("Start before");
+            AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
+            //AppModel.Instance.CurrConfig.NotifyPropertyChanged(nameof(AppModel.Instance.CurrConfig.Extensions));
+            Debug.WriteLine("Start end");
+            await Task.Delay(500);
+            Debug.WriteLine("End before");
+            AppModel.Instance.ExtensionMgt.UpdateNewVersions(AppModel.Instance.CurrConfig.Extensions);
+            //await Task.Delay(3000);
+            Debug.WriteLine("End after");
+            //AppModel.Instance.ExtensionMgt.UninstallExtensions(AppModel.Instance.CurrConfig.Extensions);
+            //AppModel.Instance.ExtensionMgt.UnpublishExtensions(AppModel.Instance.CurrConfig.Extensions);
+            //AppModel.Instance.ExtensionMgt.PublishAndInstallExtensions(AppModel.Instance.CurrConfig.Extensions);
         }
 
         private void cmb_company_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -116,7 +114,7 @@ namespace EasyALPublish
 
         private void btn_config_Click(object sender, RoutedEventArgs e)
         {
-            Settings settings = new Settings();
+            Settings settings = new Settings(Topmost);
             settings.ShowDialog();
         }
 

@@ -9,6 +9,12 @@
         mc:Ignorable="d"
         Style="{DynamicResource DefaultWindow}"
         Title="Settings" Height="450" Width="500">
+    <Window.InputBindings>
+        <KeyBinding Command="ApplicationCommands.Close" Key="Esc" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseWindow_Executed" />
+    </Window.CommandBindings>
     <Grid Background="{DynamicResource BackgroundC}">
         <Grid Margin="15,5,15,5">
             <Grid.RowDefinitions>
@@ -31,10 +37,8 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Label Content="Theme" Grid.Row="0" Padding="0,0,0,0" FontSize="13" FontWeight="Bold" Margin="0,0,10,0" />
-                    <ComboBox Name="ckb_theme" Grid.Row="1" Margin="0,0,10,10">
-                        <ComboBoxItem Content="Dark Theme" Tag="dark" />
-                        <ComboBoxItem Content="Light Theme" Tag="light" />
-                    </ComboBox>
+                    <ComboBox Name="ckb_theme" Grid.Row="1" Margin="0,0,10,10" ItemsSource="{Binding Themes}" SelectedItem="{Binding AppOptions.CurrTheme}"
+                              DisplayMemberPath="Name"/>
                 </Grid>
                 <Grid Grid.Column="1" IsEnabled="False">
                     <Grid.RowDefinitions>
@@ -60,7 +64,7 @@
                 <Button Name="btn_addCompany" fa:Awesome.Content="Plus" Grid.Row="0" Grid.Column="0" FontSize="15" VerticalContentAlignment="Center"
                         HorizontalAlignment="Right" Margin="0,5,10,5" Width="40" Padding="0,2,0,0" Click="btn_addCompany_Click" />
                 <ListView Grid.Row="1" Grid.Column="0" Name="lst_companies" ItemsSource="{Binding Companies}" Background="{DynamicResource BackgroundC}"
-                          BorderBrush="{DynamicResource BackgroundI}" Margin="0,0,10,0" SelectionMode="Single">
+                          BorderBrush="{DynamicResource BackgroundI}" Margin="0,0,10,0" SelectionMode="Single" SelectedIndex="0">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource ListViewItemDefault}">
                             <EventSetter Event="PreviewMouseDown" Handler="lst_companies_PreviewMouseDown" />

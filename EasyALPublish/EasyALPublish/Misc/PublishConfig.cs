@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -91,8 +92,14 @@ namespace EasyALPublish.Misc
             ExtensionsPath = extensionsPath;
         }
 
+        public string GetExtensionPath(BCExtension extension)
+        {
+            string appFile = string.Format("{0}_{1}_{2}.app", extension.Publisher, extension.Name, extension.NewVersion);
+            return Path.Combine(ExtensionsPath, appFile);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] string propName = null)
+        public void NotifyPropertyChanged([CallerMemberName] string propName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }

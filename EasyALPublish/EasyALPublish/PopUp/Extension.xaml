@@ -25,7 +25,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Extension Name" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
-                <TextBox Name="tbx_extensionName" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding BCExtension.Name}" TabIndex="0" />
+                <TextBox Name="tbx_extensionName" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding BCExtension.Name}" TabIndex="0"
+                         GotFocus="textbox_GotFocus" />
             </Grid>
 
             <Grid Grid.Row="2">
@@ -35,7 +36,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Publisher" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" />
                 <TextBox Name="tbx_extensionPublisher" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding BCExtension.Publisher}"
-                         TabIndex="1" />
+                         TabIndex="1" GotFocus="textbox_GotFocus" />
             </Grid>
 
             <Grid Grid.Row="3">
@@ -45,7 +46,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Current Version" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,0" IsEnabled="{Binding IsCreateMode}" />
                 <TextBox Name="tbx_currVersion" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Text="{Binding BCExtension.CurrVersion}" TabIndex="2"
-                         dp:Masking.Mask="^([0-9\.]+)$" IsEnabled="{Binding IsCreateMode}" />
+                         dp:Masking.Mask="^([0-9\.]+)$" IsEnabled="{Binding IsCreateMode}" GotFocus="textbox_GotFocus" />
             </Grid>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">

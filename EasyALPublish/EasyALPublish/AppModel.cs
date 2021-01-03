@@ -1,4 +1,5 @@
-﻿using EasyALPublish.Extension;
+﻿using DSaladin.DynamicsBC;
+using EasyALPublish.Extension;
 using EasyALPublish.Misc;
 using EasyALPublish.Persistence;
 using System;
@@ -28,6 +29,35 @@ namespace EasyALPublish
             }
             set { instance = value; }
         }
+
+        private AppOptions appOptions;
+
+        public AppOptions AppOptions
+        {
+            get { return appOptions; }
+            set
+            {
+                appOptions = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<Theme> themes = new ObservableCollection<Theme>()
+        {
+            new Theme("Dark Theme", "dark"),
+            new Theme("Light Theme", "light")
+        };
+
+        public ObservableCollection<Theme> Themes
+        {
+            get { return themes; }
+            set
+            {
+                themes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         private List<BCVersion> bcVersions = new List<BCVersion>()
         {
@@ -104,12 +134,14 @@ namespace EasyALPublish
         {
             PersistentData data = PeristenceMgt.Load();
             Companies = new ObservableCollection<Company>(data.Companies);
+            AppOptions = data.AppOptions;
         }
 
         public void SaveData()
         {
             PersistentData data = new PersistentData();
             data.Companies = Companies.ToList();
+            data.AppOptions = AppOptions;
             PeristenceMgt.Save(data);
         }
 

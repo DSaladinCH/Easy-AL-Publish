@@ -22,10 +22,11 @@ namespace EasyALPublish
     {
         private Company currCompany;
 
-        public Settings()
+        public Settings(bool topMost = false)
         {
             InitializeComponent();
             DataContext = AppModel.Instance;
+            Topmost = topMost;
         }
 
         private void lst_companies_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -76,6 +77,11 @@ namespace EasyALPublish
             {
                 currCompany.Configs.Remove((PublishConfig)((Button)sender).DataContext);
             }
+        }
+
+        private void CloseWindow_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

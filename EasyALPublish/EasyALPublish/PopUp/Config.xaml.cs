@@ -1,7 +1,9 @@
-﻿using EasyALPublish.Misc;
+﻿using EasyALPublish.Extension;
+using EasyALPublish.Misc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,6 +24,8 @@ namespace EasyALPublish.PopUp
     /// </summary>
     public partial class Config : Window, INotifyPropertyChanged
     {
+        private bool openDropDown = true;
+
         private PublishConfig publishConfig;
         public PublishConfig PublishConfig
         {
@@ -71,6 +75,21 @@ namespace EasyALPublish.PopUp
             }));
         }
 
+        private void textbox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ((TextBox)sender).SelectAll();
+            openDropDown = true;
+        }
+
+        private void cmb_configVersion_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (openDropDown)
+            {
+                openDropDown = false;
+                ((ComboBox)sender).IsDropDownOpen = true;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propName = null)
         {
@@ -86,19 +105,27 @@ namespace EasyALPublish.PopUp
                 return;
             }
 
-            if (tbx_configName.Text.Length > 2)
+            if (tbx_configName.Text.Length < 2)
                 return;
 
-            if (tbx_instanceName.Text.Length > 2)
+            if (tbx_instanceName.Text.Length < 2)
                 return;
 
             if (cmb_configVersion.SelectedIndex == -1)
                 return;
 
-            if (tbx_extensionsPath.Text.Length > 2)
+            if (tbx_extensionsPath.Text.Length < 2)
                 return;
 
             this.Close();
+        }
+
+        private void cmb_configVersion_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine(((BCVersion)((ComboBox)sender).SelectedItem).Name);
+            Debug.WriteLine(PublishConfig.Version.Name);
+
+            tbx_extensionsPath.Focus();
         }
     }
 }
