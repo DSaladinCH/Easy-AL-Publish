@@ -21,37 +21,66 @@ namespace EasyALPublish.Extension
 
         public void UpdateNewVersions(ObservableCollection<BCExtension> extensions)
         {
-            extensions.RunForEach(e => e.NewVersion = GetAppNewVersion(AppModel.Instance.CurrConfig.ExtensionsPath, e.Name, e.Publisher));
+            extensions.RunForEach(e => e.NewVersion = GetAppNewVersion(AppModel.Instance.CurrConfig.ExtensionsPath, e));
         }
 
-        public void UninstallExtensions(ObservableCollection<BCExtension> extensions)
+        public void Uninstall(ObservableCollection<BCExtension> extensions)
         {
-            extensions.RunForEach(e => Uninstall(AppModel.Instance.CurrConfig.InstanceName, e.Name, e.CurrVersion));
+            extensions.RunForEach(e =>
+            {
+                if (e.Status == ExtensionStatus.Installed)
+                    if (Uninstall(AppModel.Instance.CurrConfig.InstanceName, e))
+                        e.Status = ExtensionStatus.Published;
+            });
         }
 
-        public void UnpublishExtensions(ObservableCollection<BCExtension> extensions)
+        public void Unpublish(ObservableCollection<BCExtension> extensions)
         {
-            extensions.RunForEach(e => Unpublish(AppModel.Instance.CurrConfig.InstanceName, e.Name, e.CurrVersion));
+            extensions.RunForEach(e =>
+            {
+                if (e.Status == ExtensionStatus.Published)
+                    if (Unpublish(AppModel.Instance.CurrConfig.InstanceName, e))
+                        e.Status = ExtensionStatus.None;
+            });
         }
 
-        public void PublishAndInstallExtensions(ObservableCollection<BCExtension> extensions)
+        public void PublishAndInstall(ObservableCollection<BCExtension> extensions)
         {
-            extensions.RunForEach(e => PublishAndInstallNew(AppModel.Instance.CurrConfig, e));
+            extensions.RunForEach(e =>
+            {
+                if (Publish(AppModel.Instance.CurrConfig, e))
+                    e.Status = ExtensionStatus.Published;
+
+                if (Install(AppModel.Instance.CurrConfig, e))
+                    e.Status = ExtensionStatus.Installed;
+            });
+        }
+
+        public void ResetStatus(ObservableCollection<BCExtension> extensions)
+        {
+            extensions.RunForEach(e => e.Status = ExtensionStatus.None);
         }
 
         private async Task<BCExtension> GetAppCurrVersion(string instanceName, BCExtension extension)
         {
             NAVAppInfo appInfo = Commands.GetNAVAppInfo(instanceName, extension.Name);
+            if (appInfo == null)
+            {
+                extension.CurrVersion = "";
+                extension.Status = ExtensionStatus.None;
+                return extension;
+            }
+
             extension.CurrVersion = appInfo.Version;
             extension.Status = (ExtensionStatus)appInfo.Status;
             return extension;
         }
 
-        private string GetAppNewVersion(string extensionsPath, string appName, string publisher)
+        private string GetAppNewVersion(string extensionsPath, BCExtension extension)
         {
             List<Version> versions = new List<Version>();
             List<string> versionsStr = new List<string>();
-            string startFileName = string.Format("{0}_{1}_*", publisher, appName);
+            string startFileName = string.Format("{0}_{1}_*", extension.Publisher, extension.Name);
             List<string> files = Directory.GetFiles(extensionsPath, startFileName).ToList();
             foreach (string file in files)
             {
@@ -70,34 +99,33 @@ namespace EasyALPublish.Extension
             return versionsStr.First(v => new Version(v) == versions.Last());
         }
 
-        private bool Uninstall(string instanceName, string appName, string version)
+        private bool Uninstall(string instanceName, BCExtension extension)
         {
-            return Commands.UninstallExtension(instanceName, appName, version);
+            return Commands.UninstallExtension(instanceName, extension.Name, extension.CurrVersion);
         }
 
-        private bool Unpublish(string instanceName, string appName, string version)
+        private bool Unpublish(string instanceName, BCExtension extension)
         {
-            return Commands.UnpublishExtension(instanceName, appName, version);
+            return Commands.UnpublishExtension(instanceName, extension.Name, extension.CurrVersion);
         }
 
-        private bool PublishAndInstallNew(PublishConfig config, BCExtension extension)
+        private bool Publish(PublishConfig config, BCExtension extension)
         {
-            if (!Commands.UninstallExtension(config.InstanceName, extension.Name, extension.CurrVersion))
-                return false;
-
-            if (!Commands.UnpublishExtension(config.InstanceName, extension.Name, extension.CurrVersion))
-                return false;
-
             if (!Commands.Publish(config.InstanceName, config.GetExtensionPath(extension)))
                 return false;
 
             if (!Commands.Sync(config.InstanceName, extension.Name, extension.NewVersion))
                 return false;
 
-            if (new Version(extension.NewVersion) > new Version(extension.CurrVersion))
+            if (extension.CurrVersion == "" || new Version(extension.NewVersion) > new Version(extension.CurrVersion))
                 if (!Commands.DataUpgrade(config.InstanceName, extension.Name, extension.NewVersion))
                     return false;
 
+            return true;
+        }
+
+        private bool Install(PublishConfig config, BCExtension extension)
+        {
             if (!Commands.Install(config.InstanceName, extension.Name, extension.NewVersion))
                 return false;
 

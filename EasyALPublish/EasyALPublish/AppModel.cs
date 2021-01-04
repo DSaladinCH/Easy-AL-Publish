@@ -135,6 +135,14 @@ namespace EasyALPublish
             PersistentData data = PeristenceMgt.Load();
             Companies = new ObservableCollection<Company>(data.Companies);
             AppOptions = data.AppOptions;
+
+            foreach (var item in companies)
+            {
+                foreach (var item2 in item.Configs)
+                {
+                    ExtensionMgt.ResetStatus(item2.Extensions);
+                }
+            }
         }
 
         public void SaveData()

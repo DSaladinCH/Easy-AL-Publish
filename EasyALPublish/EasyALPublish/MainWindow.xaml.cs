@@ -51,22 +51,27 @@ namespace EasyALPublish
 
         private async void btn_start_Click(object sender, RoutedEventArgs e)
         {
-            if (!Commands.IsInitialized())
-                Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion);
-            //PowerShellMgt.StartPS(AppModel.Instance.CurrConfig.Version);
-            //string instanceName = AppModel.Instance.CurrConfig.InstanceName;
-            Debug.WriteLine("Start before");
-            AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
-            //AppModel.Instance.CurrConfig.NotifyPropertyChanged(nameof(AppModel.Instance.CurrConfig.Extensions));
-            Debug.WriteLine("Start end");
-            await Task.Delay(500);
-            Debug.WriteLine("End before");
-            AppModel.Instance.ExtensionMgt.UpdateNewVersions(AppModel.Instance.CurrConfig.Extensions);
-            //await Task.Delay(3000);
-            Debug.WriteLine("End after");
-            //AppModel.Instance.ExtensionMgt.UninstallExtensions(AppModel.Instance.CurrConfig.Extensions);
-            //AppModel.Instance.ExtensionMgt.UnpublishExtensions(AppModel.Instance.CurrConfig.Extensions);
-            //AppModel.Instance.ExtensionMgt.PublishAndInstallExtensions(AppModel.Instance.CurrConfig.Extensions);
+            await Task.Run(() =>
+            {
+                if (!Commands.IsInitialized())
+                    Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion);
+
+                Debug.WriteLine("Start before");
+                AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
+                Debug.WriteLine("Start end");
+                Debug.WriteLine("Start before");
+                AppModel.Instance.ExtensionMgt.UpdateNewVersions(AppModel.Instance.CurrConfig.Extensions);
+                Debug.WriteLine("Start after");
+                Debug.WriteLine("Start before");
+                AppModel.Instance.ExtensionMgt.Uninstall(AppModel.Instance.CurrConfig.Extensions);
+                Debug.WriteLine("Start after");
+                Debug.WriteLine("Start before");
+                AppModel.Instance.ExtensionMgt.Unpublish(AppModel.Instance.CurrConfig.Extensions);
+                Debug.WriteLine("Start after");
+                Debug.WriteLine("Start before");
+                AppModel.Instance.ExtensionMgt.PublishAndInstall(AppModel.Instance.CurrConfig.Extensions);
+                Debug.WriteLine("Start after");
+            });
         }
 
         private void cmb_company_SelectionChanged(object sender, SelectionChangedEventArgs e)

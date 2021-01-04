@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -40,6 +41,7 @@ namespace EasyALPublish.Extension
 
         private string currVersion;
 
+        [JsonIgnore]
         public string CurrVersion
         {
             get { return currVersion; }
@@ -53,6 +55,7 @@ namespace EasyALPublish.Extension
 
         private string newVersion;
 
+        [JsonIgnore]
         public string NewVersion
         {
             get { return newVersion; }
@@ -63,17 +66,30 @@ namespace EasyALPublish.Extension
             }
         }
 
+        [JsonIgnore]
         public Visibility ShowVersions
         {
             get
             {
-                if (currVersion == "")
+                if (string.IsNullOrEmpty(currVersion) && string.IsNullOrEmpty(newVersion))
                     return Visibility.Hidden;
                 return Visibility.Visible;
             }
         }
 
-        public ExtensionStatus Status { get; set; }
+        private ExtensionStatus status;
+
+        [JsonIgnore]
+        public ExtensionStatus Status
+        {
+            get { return status; }
+            set
+            {
+                status = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         private ObservableCollection<BCExtension> dependencies = new ObservableCollection<BCExtension>();
 

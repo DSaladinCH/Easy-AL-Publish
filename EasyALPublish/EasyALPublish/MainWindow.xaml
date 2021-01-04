@@ -32,9 +32,9 @@
                     Height="50" Width="50" Padding="0" Click="btn_start_Click" />
 
                 <ComboBox Name="cmb_company" Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Companies}" SelectionChanged="cmb_company_SelectionChanged"
-                          DisplayMemberPath="Name" SelectedIndex="0" Margin="12,0,12,2" />
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="10,0,10,2" />
                 <ComboBox Name="cmb_config" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding CurrCompany.Configs}" SelectionChanged="cmb_config_SelectionChanged"
-                          DisplayMemberPath="Name" SelectedIndex="0" Margin="12,2,12,0"/>
+                          DisplayMemberPath="Name" SelectedIndex="0" Margin="10,2,10,0"/>
 
                 <Button Name="btn_pin" fa:Awesome.Content="ThumbTack" Grid.Column="2" Grid.RowSpan="2" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"
                     Height="50" Width="50" Click="btn_pin_Click">
@@ -66,7 +66,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
+                                    <RowDefinition MinHeight="0" MaxHeight="14" />
+                                    <RowDefinition MinHeight="0" MaxHeight="14" />
                                 </Grid.RowDefinitions>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
@@ -82,17 +83,20 @@
                                         </MenuItem>
                                     </ContextMenu>
                                 </Grid.ContextMenu>
-                                <Label Content="{Binding Name}" Grid.Column="0" Padding="0,6,0,6" />
+                                <Label Content="{Binding Name}" Grid.Column="0" Padding="0,6,0,0" />
                                 <Button Grid.Column="1" HorizontalAlignment="Right" VerticalContentAlignment="Center" Margin="0,0,0,0" Width="30"
                                     Style="{DynamicResource TransparentButton}" fa:Awesome.Content="Plus" Click="btn_addDependency_Click" />
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,-5,0,0">
-                                    <Label Grid.Row="1" Content="{Binding CurrVersion}" Padding="0,0,0,0" FontSize="10"
+                                    <Label Content="{Binding CurrVersion}" Padding="0,0,0,0" FontSize="10"
                                         Foreground="{DynamicResource ForegroundDimmed}" />
-                                    <Label Grid.Row="1" fa:Awesome.Content="LongArrowRight" Padding="0,0,0,0"  FontSize="10"
+                                    <Label fa:Awesome.Content="LongArrowRight" Padding="0,0,0,0" FontSize="10"
                                         VerticalContentAlignment="Center" Margin="10,0,10,0" Visibility="{Binding ShowVersions}"
                                         Foreground="{DynamicResource ForegroundDimmed}" />
-                                    <Label Grid.Row="1" Content="{Binding NewVersion}" Padding="0,0,0,0" FontSize="10"
+                                    <Label Content="{Binding NewVersion}" Padding="0,0,0,0" FontSize="10"
                                         Foreground="{DynamicResource ForegroundDimmed}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,-1,0,0">
+                                    <Label Content="{Binding Status}" Padding="0,0,0,0" FontSize="10" Foreground="{DynamicResource ForegroundDimmed}" />
                                 </StackPanel>
                             </Grid>
                         </HierarchicalDataTemplate>
