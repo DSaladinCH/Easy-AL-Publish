@@ -42,39 +42,6 @@ namespace EasyALPublish
             }
         }
 
-        private ObservableCollection<Theme> themes = new ObservableCollection<Theme>()
-        {
-            new Theme("Dark Theme", "dark"),
-            new Theme("Light Theme", "light")
-        };
-
-        public ObservableCollection<Theme> Themes
-        {
-            get { return themes; }
-            set
-            {
-                themes = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-
-        private List<BCVersion> bcVersions = new List<BCVersion>()
-        {
-            new BCVersion("BC V13", "130"),
-            new BCVersion("BC V14", "140"),
-            new BCVersion("BC V15", "150"),
-            new BCVersion("BC V16", "160"),
-            new BCVersion("BC V17", "170"),
-            new BCVersion("BC V18", "180")
-        };
-
-        public List<BCVersion> BCVersions
-        {
-            get { return bcVersions; }
-            set { bcVersions = value; }
-        }
-
         private ObservableCollection<Company> companies = new ObservableCollection<Company>();
 
         public ObservableCollection<Company> Companies
@@ -123,6 +90,38 @@ namespace EasyALPublish
             }
         }
 
+        private ObservableCollection<Theme> themes = new ObservableCollection<Theme>()
+        {
+            new Theme("Dark Theme", "dark"),
+            new Theme("Light Theme", "light")
+        };
+
+        public ObservableCollection<Theme> Themes
+        {
+            get { return themes; }
+            set
+            {
+                themes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private List<BCVersion> bcVersions = new List<BCVersion>()
+        {
+            new BCVersion("BC V13", "130"),
+            new BCVersion("BC V14", "140"),
+            new BCVersion("BC V15", "150"),
+            new BCVersion("BC V16", "160"),
+            new BCVersion("BC V17", "170"),
+            new BCVersion("BC V18", "180")
+        };
+
+        public List<BCVersion> BCVersions
+        {
+            get { return bcVersions; }
+            set { bcVersions = value; }
+        }
+
         public IPersistenceDataManagement PeristenceMgt { get; } = new PersistenceJsonManagement();
 
         public AppModel()
@@ -140,6 +139,7 @@ namespace EasyALPublish
             {
                 foreach (var item2 in item.Configs)
                 {
+                    item2.Version = BCVersions.First(v => v.FolderVersion == item2.Version.FolderVersion);
                     ExtensionMgt.ResetStatus(item2.Extensions);
                 }
             }

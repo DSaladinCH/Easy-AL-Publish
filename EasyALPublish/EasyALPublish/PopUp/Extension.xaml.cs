@@ -92,9 +92,6 @@ namespace EasyALPublish.PopUp
                 return;
             }
 
-            if (IsCreateMode && !Regex.IsMatch(tbx_currVersion.Text, @"^(([0-9]+)\.?)*([^\.])$"))
-                return;
-
             if (tbx_extensionName.Text.Length < 2)
                 return;
 

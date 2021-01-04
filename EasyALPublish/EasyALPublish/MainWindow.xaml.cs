@@ -63,9 +63,6 @@ namespace EasyALPublish
 
             await Task.Run(() =>
             {
-                if (!Commands.IsInitialized())
-                    Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion);
-
                 Debug.WriteLine("Getting current Versions");
                 AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
                 Dispatcher.Invoke(() => pgr_progress.Value += 1);
@@ -101,6 +98,7 @@ namespace EasyALPublish
             AppModel.Instance.CurrConfig = (PublishConfig)cmb_config.SelectedItem;
             if (AppModel.Instance.CurrConfig == null)
                 return;
+            Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion, false);
         }
 
         private void btn_addDependency_Click(object sender, RoutedEventArgs e)
@@ -109,6 +107,7 @@ namespace EasyALPublish
             if (!PopUpMgt.NewExtension(out BCExtension newExtension, Topmost))
                 return;
             parentExtension.Dependencies.Add(newExtension);
+            AppModel.Instance.SaveData();
         }
 
         private void btn_editExtension_Click(object sender, RoutedEventArgs e)

@@ -67,6 +67,7 @@ namespace EasyALPublish.PopUp
                 Title = "Edit Config";
             Topmost = topMost;
             cmb_configVersion.ItemsSource = AppModel.Instance.BCVersions;
+            //cmb_configVersion.SelectedItem = AppModel.Instance.AppOptions.BCVersions.First(v => v.FolderVersion == extension.Version.FolderVersion);
 
             tbx_configName.Focus();
             tbx_configName.Dispatcher.BeginInvoke(new Action(() =>

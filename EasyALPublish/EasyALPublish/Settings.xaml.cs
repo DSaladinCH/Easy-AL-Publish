@@ -1,4 +1,6 @@
-﻿using EasyALPublish.Misc;
+﻿using DSaladin.DynamicsBC;
+using EasyALPublish.Misc;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +75,22 @@ namespace EasyALPublish
             if (!PopUpMgt.EditConfig(ref publishConfig, Topmost))
                 return;
             currCompany.Configs.Update((PublishConfig)((Button)sender).DataContext, publishConfig);
+        }
+
+        private void btn_uploadLicense_Click(object sender, RoutedEventArgs e)
+        {
+            PublishConfig publishConfig = (PublishConfig)((Button)sender).DataContext;
+            Commands.Init(publishConfig.Version.FolderVersion, true);
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Select License File";
+            dialog.Filter = "License File (*.flf)|*.flf";
+            bool? dialogResult = dialog.ShowDialog();
+            if (dialogResult == false || dialogResult == null)
+                return;
+
+            bool restart = PopUpMgt.Confirm("Restart Instance", "Would you like to restart the Server now?", Topmost);
+            Commands.UploadLicense(publishConfig.InstanceName, dialog.FileName, restart);
+            PopUpMgt.Message("Uploaded", "License File successfully uploaded", Topmost);
         }
 
         private void btn_deleteConfig_Click(object sender, RoutedEventArgs e)

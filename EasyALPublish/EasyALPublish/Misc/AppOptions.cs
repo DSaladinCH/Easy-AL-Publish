@@ -1,5 +1,7 @@
-﻿using System;
+﻿using EasyALPublish.Extension;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -13,9 +15,9 @@ namespace EasyALPublish.Misc
     //[DebuggerDisplay("")]
     public class AppOptions : INotifyPropertyChanged
     {
-        private Theme currTheme;
+        private int currTheme = 0;
 
-        public Theme CurrTheme
+        public int CurrTheme
         {
             get { return currTheme; }
             set
@@ -25,7 +27,6 @@ namespace EasyALPublish.Misc
             }
         }
 
-
         public AppOptions()
         {
 
@@ -33,8 +34,6 @@ namespace EasyALPublish.Misc
 
         public void Instantiate()
         {
-            if (currTheme == null)
-                CurrTheme = AppModel.Instance.Themes[0];
         }
 
         #region Notify Property Changed
