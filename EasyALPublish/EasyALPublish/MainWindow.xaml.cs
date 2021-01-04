@@ -51,26 +51,40 @@ namespace EasyALPublish
 
         private async void btn_start_Click(object sender, RoutedEventArgs e)
         {
+            int extensionsCount = AppModel.Instance.CurrConfig.Extensions.CountAll();
+            if (!PopUpMgt.Confirm("Uninstall and re-install", 
+                string.Format("Are you sure you want to uninstall and unpublish {0} extensions you have set up and re-publish and re-install them with the latest version?", extensionsCount), 
+                Topmost))
+                return;
+
+            pgr_progress.Minimum = 0;
+            pgr_progress.Value = 0;
+            pgr_progress.Maximum = extensionsCount * 4 + 2;
+
             await Task.Run(() =>
             {
                 if (!Commands.IsInitialized())
                     Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion);
 
-                Debug.WriteLine("Start before");
+                Debug.WriteLine("Getting current Versions");
                 AppModel.Instance.ExtensionMgt.UpdateCurrVersions(AppModel.Instance.CurrConfig.Extensions);
-                Debug.WriteLine("Start end");
-                Debug.WriteLine("Start before");
+                Dispatcher.Invoke(() => pgr_progress.Value += 1);
+                Debug.WriteLine("Got current Versions");
+                Debug.WriteLine("Getting new Versions");
                 AppModel.Instance.ExtensionMgt.UpdateNewVersions(AppModel.Instance.CurrConfig.Extensions);
-                Debug.WriteLine("Start after");
-                Debug.WriteLine("Start before");
-                AppModel.Instance.ExtensionMgt.Uninstall(AppModel.Instance.CurrConfig.Extensions);
-                Debug.WriteLine("Start after");
-                Debug.WriteLine("Start before");
-                AppModel.Instance.ExtensionMgt.Unpublish(AppModel.Instance.CurrConfig.Extensions);
-                Debug.WriteLine("Start after");
-                Debug.WriteLine("Start before");
-                AppModel.Instance.ExtensionMgt.PublishAndInstall(AppModel.Instance.CurrConfig.Extensions);
-                Debug.WriteLine("Start after");
+                Dispatcher.Invoke(() => pgr_progress.Value += 1);
+                Debug.WriteLine("Got new Versions");
+                Debug.WriteLine("Uninstalling Extensions");
+                AppModel.Instance.ExtensionMgt.Uninstall(AppModel.Instance.CurrConfig.Extensions, this, pgr_progress);
+                Debug.WriteLine("Uninstalled Extensions");
+                Debug.WriteLine("Unpublishing Extensions");
+                AppModel.Instance.ExtensionMgt.Unpublish(AppModel.Instance.CurrConfig.Extensions, this, pgr_progress);
+                Debug.WriteLine("Unpublished Extensions");
+                Debug.WriteLine("Publishing and Installing Extensions");
+                AppModel.Instance.ExtensionMgt.PublishAndInstall(AppModel.Instance.CurrConfig.Extensions, this, pgr_progress);
+                Debug.WriteLine("Published and Installed Extensions");
+
+                Dispatcher.Invoke(() => PopUpMgt.Message("Completion", "All extension have been successfully reinstalled", Topmost));
             });
         }
 

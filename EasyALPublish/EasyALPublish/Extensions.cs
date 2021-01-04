@@ -18,8 +18,9 @@ namespace EasyALPublish
         {
             for (int i = 0; i < extensions.Count; i++)
             {
-                if (extensions[i].Dependencies.Count > 0)
-                    extensions[i].Dependencies.RunForEach(function, withSubElements);
+                if (withSubElements)
+                    if (extensions[i].Dependencies.Count > 0)
+                        extensions[i].Dependencies.RunForEach(function, withSubElements);
                 function?.Invoke(extensions[i]);
             }
         }
@@ -109,6 +110,13 @@ namespace EasyALPublish
             }
 
             return false;
+        }
+
+        public static int CountAll(this ObservableCollection<BCExtension> list, bool withSubElements = true)
+        {
+            int count = 0;
+            list.RunForEach(ex => count += 1);
+            return count;
         }
     }
 }

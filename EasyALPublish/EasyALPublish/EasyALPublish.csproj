@@ -145,6 +145,12 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Extension\ExtensionStatus.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="PopUp\MessageBox.xaml.cs">
+      <DependentUpon>MessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PopUp\ConfirmBox.xaml.cs">
+      <DependentUpon>ConfirmBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Window\CanMinimize.cs" />
     <Compile Include="Resources\Window\Default.cs" />
     <Compile Include="Resources\Window\NoResize.cs" />
@@ -170,6 +176,14 @@
     <Page Include="PopUp\Config.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PopUp\MessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PopUp\ConfirmBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PopUp\Extension.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\ProgressBar\Default.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Schema\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -247,7 +265,6 @@
   <ItemGroup>
     <Compile Include="Misc\AppOptions.cs" />
     <Compile Include="Misc\Company.cs" />
-    <Compile Include="Misc\PowerShellMgt.cs" />
     <Compile Include="Misc\PublishConfig.cs" />
     <Compile Include="Misc\Theme.cs" />
     <Compile Include="Persistence\IPersistenceDataManagement.cs" />

@@ -9,6 +9,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace EasyALPublish.Extension
 {
@@ -24,35 +27,55 @@ namespace EasyALPublish.Extension
             extensions.RunForEach(e => e.NewVersion = GetAppNewVersion(AppModel.Instance.CurrConfig.ExtensionsPath, e));
         }
 
-        public void Uninstall(ObservableCollection<BCExtension> extensions)
+        public void Uninstall(ObservableCollection<BCExtension> extensions, Window window = null, ProgressBar progressBar = null)
         {
             extensions.RunForEach(e =>
             {
                 if (e.Status == ExtensionStatus.Installed)
+                {
                     if (Uninstall(AppModel.Instance.CurrConfig.InstanceName, e))
+                    {
                         e.Status = ExtensionStatus.Published;
+                        if (progressBar != null)
+                            window.Dispatcher.Invoke(() => progressBar.Value += 1);
+                    }
+                }
             });
         }
 
-        public void Unpublish(ObservableCollection<BCExtension> extensions)
+        public void Unpublish(ObservableCollection<BCExtension> extensions, Window window = null, ProgressBar progressBar = null)
         {
             extensions.RunForEach(e =>
             {
                 if (e.Status == ExtensionStatus.Published)
+                {
                     if (Unpublish(AppModel.Instance.CurrConfig.InstanceName, e))
+                    {
                         e.Status = ExtensionStatus.None;
+                        if (progressBar != null)
+                            window.Dispatcher.Invoke(() => progressBar.Value += 1);
+                    }
+                }
             });
         }
 
-        public void PublishAndInstall(ObservableCollection<BCExtension> extensions)
+        public void PublishAndInstall(ObservableCollection<BCExtension> extensions, Window window = null, ProgressBar progressBar = null)
         {
             extensions.RunForEach(e =>
             {
                 if (Publish(AppModel.Instance.CurrConfig, e))
+                {
                     e.Status = ExtensionStatus.Published;
+                    if (progressBar != null)
+                        window.Dispatcher.Invoke(() => progressBar.Value += 1);
+                }
 
                 if (Install(AppModel.Instance.CurrConfig, e))
+                {
                     e.Status = ExtensionStatus.Installed;
+                    if (progressBar != null)
+                        window.Dispatcher.Invoke(() => progressBar.Value += 1);
+                }
             });
         }
 

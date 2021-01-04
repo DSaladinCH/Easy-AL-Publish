@@ -37,6 +37,9 @@
 
                 <!-- ListView -->
                 <ResourceDictionary Source="./Resources/ListView/Default.xaml" />
+
+                <!-- ProgressBar -->
+                <ResourceDictionary Source="./Resources/ProgressBar/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

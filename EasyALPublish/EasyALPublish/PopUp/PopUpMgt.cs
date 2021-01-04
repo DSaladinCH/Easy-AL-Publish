@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace EasyALPublish
 {
@@ -22,6 +23,19 @@ namespace EasyALPublish
             PopUp.Input input = new PopUp.Input(title, topMost);
             input.ShowDialog();
             return input.InputText;
+        }
+
+        public static bool Confirm(string title, string message, bool topMost = false)
+        {
+            PopUp.ConfirmBox confirm = new PopUp.ConfirmBox(title, message, topMost);
+            confirm.ShowDialog();
+            return confirm.CloseOK;
+        }
+
+        public static void Message(string title, string message, bool topMost = false)
+        {
+            PopUp.MessageBox messageBox = new PopUp.MessageBox(title, message, topMost);
+            messageBox.ShowDialog();
         }
 
         public static bool NewExtension(out BCExtension ex, bool topMost = false)
