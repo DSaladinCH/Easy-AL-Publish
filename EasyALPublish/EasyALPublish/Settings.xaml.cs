@@ -27,6 +27,11 @@ namespace EasyALPublish
             InitializeComponent();
             DataContext = AppModel.Instance;
             Topmost = topMost;
+
+            Closing += (s, e) =>
+            {
+                AppModel.Instance.SaveData();
+            };
         }
 
         private void lst_companies_PreviewMouseDown(object sender, MouseButtonEventArgs e)

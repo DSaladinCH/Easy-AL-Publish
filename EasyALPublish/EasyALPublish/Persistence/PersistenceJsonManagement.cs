@@ -29,8 +29,8 @@ namespace EasyALPublish.Persistence
 
         public PersistenceJsonManagement()
         {
-            //savePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
-            savePath = "C:\\temp\\";
+            savePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
+            //savePath = "C:\\temp\\";
         }
 
         public PersistentData Load()

@@ -117,11 +117,13 @@ namespace EasyALPublish
             if (!PopUpMgt.EditExtension(ref extension, Topmost))
                 return;
             AppModel.Instance.CurrConfig.Extensions.Update((BCExtension)((MenuItem)sender).DataContext, extension);
+            AppModel.Instance.SaveData();
         }
 
         private void btn_deleteExtension_Click(object sender, RoutedEventArgs e)
         {
             AppModel.Instance.CurrConfig.Extensions.Delete((BCExtension)((MenuItem)sender).DataContext);
+            AppModel.Instance.SaveData();
         }
 
         private void btn_addExtension_Click(object sender, RoutedEventArgs e)
@@ -129,6 +131,7 @@ namespace EasyALPublish
             if (!PopUpMgt.NewExtension(out BCExtension newExtension, Topmost))
                 return;
             AppModel.Instance.CurrConfig.Extensions.Add(newExtension);
+            AppModel.Instance.SaveData();
         }
 
         private void btn_config_Click(object sender, RoutedEventArgs e)
