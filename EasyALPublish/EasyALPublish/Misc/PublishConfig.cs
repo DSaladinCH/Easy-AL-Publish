@@ -37,6 +37,18 @@ namespace EasyALPublish.Misc
             }
         }
 
+        private string computerName;
+
+        public string ComputerName
+        {
+            get { return computerName; }
+            set
+            {
+                computerName = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private string instanceName;
         public string InstanceName
         {

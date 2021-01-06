@@ -51,6 +51,9 @@ namespace EasyALPublish
 
         private async void btn_start_Click(object sender, RoutedEventArgs e)
         {
+            if (AppModel.Instance.CurrConfig == null || AppModel.Instance.CurrConfig.Extensions.Count == 0)
+                return;
+
             int extensionsCount = AppModel.Instance.CurrConfig.Extensions.CountAll();
             if (!PopUpMgt.Confirm("Uninstall and re-install", 
                 string.Format("Are you sure you want to uninstall and unpublish {0} extensions you have set up and re-publish and re-install them with the latest version?", extensionsCount), 
@@ -71,6 +74,16 @@ namespace EasyALPublish
                 AppModel.Instance.ExtensionMgt.UpdateNewVersions(AppModel.Instance.CurrConfig.Extensions);
                 Dispatcher.Invoke(() => pgr_progress.Value += 1);
                 Debug.WriteLine("Got new Versions");
+                int count = 0;
+                foreach (var item in AppModel.Instance.CurrConfig.Extensions)
+                {
+                    if (item.Status == Extension.ExtensionStatus.Installed)
+                        count += 4;
+                    else if (item.Status == Extension.ExtensionStatus.Published)
+                        count += 3;
+                    else
+                        count += 2;
+                }
                 Debug.WriteLine("Uninstalling Extensions");
                 AppModel.Instance.ExtensionMgt.Uninstall(AppModel.Instance.CurrConfig.Extensions, this, pgr_progress);
                 Debug.WriteLine("Uninstalled Extensions");
