@@ -111,7 +111,11 @@ namespace EasyALPublish
             AppModel.Instance.CurrConfig = (PublishConfig)cmb_config.SelectedItem;
             if (AppModel.Instance.CurrConfig == null)
                 return;
-            Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion, false);
+
+            if (string.IsNullOrEmpty(AppModel.Instance.CurrConfig.ComputerName))
+                Commands.Init(AppModel.Instance.CurrConfig.Version.FolderVersion, false);
+            else
+                Commands.Init(AppModel.Instance.CurrConfig.ComputerName, AppModel.Instance.CurrConfig.Version.FolderVersion, false);
         }
 
         private void btn_addDependency_Click(object sender, RoutedEventArgs e)
