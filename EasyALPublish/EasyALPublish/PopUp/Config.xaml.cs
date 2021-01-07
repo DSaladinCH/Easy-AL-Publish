@@ -106,19 +106,33 @@ namespace EasyALPublish.PopUp
                 return;
             }
 
-            if (tbx_configName.Text.Length < 2)
+            if (!AllFilled())
+            {
+                PopUpMgt.Message("Fill in all fields", "Please fill in all fields first to continue", Topmost);
                 return;
-
-            if (tbx_instanceName.Text.Length < 2)
-                return;
-
-            if (cmb_configVersion.SelectedIndex == -1)
-                return;
-
-            if (tbx_extensionsPath.Text.Length < 2)
-                return;
+            }
 
             this.Close();
+        }
+
+        private bool AllFilled()
+        {
+            if (tbx_configName.Text.Length < 2)
+                return false;
+
+            if (tbx_computerName.Text.Length < 2)
+                return false;
+
+            if (tbx_instanceName.Text.Length < 2)
+                return false;
+
+            if (cmb_configVersion.SelectedIndex == -1)
+                return false;
+
+            if (tbx_extensionsPath.Text.Length < 2)
+                return false;
+
+            return true;
         }
 
         private void cmb_configVersion_SelectionChanged(object sender, SelectionChangedEventArgs e)
